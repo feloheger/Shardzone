@@ -1,15 +1,10 @@
-main: ${PACKAGE}.${NAME}
-name: ${NAME}
-version: "${VERSION}"
-api-version: "26.1.2"
-author: AUTHOR
-description: DESCRIPTION
-permissions:
-  example.use:
-    description: Allows use of the /example command
-    default: true
-  example.*:
-    description: Grants all other permissions
-    default: false
-    children:
-      example.use: true
+name: ShardZone
+version: 1.0
+main: dev.shardzone.ShardZonePlugin
+api-version: 1.21
+author: custom
+description: Gives gems to players who stay in a zone for 1 minute.
+commands:
+  afk:
+    description: Teleport to AFK location
+    aliases: [away]

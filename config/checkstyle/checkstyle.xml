@@ -53,10 +53,8 @@
   </module>
 
   <module name="LineLength">
-    <property name="fileExtensions" value="java"/>
-    <property name="max" value="100"/>
-    <property name="ignorePattern"
-             value="^package.*|^import.*|href\s*=\s*&quot;[^&quot;]*&quot;|http://|https://|ftp://"/>
+    <property name="max" value="120"/>   <!-- oder 100 behalten -->
+    <property name="ignorePattern" value="^package.*|^import.*"/>
   </module>
   <!--  Suppression to prevent LineLength Check from flagging lines in Text-blocks -->
   <module name="SuppressWithPlainTextCommentFilter">
@@ -320,12 +318,12 @@
              value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
     </module>
     <module name="Indentation">
-      <property name="basicOffset" value="2"/>
-      <property name="braceAdjustment" value="2"/>
-      <property name="caseIndent" value="2"/>
+      <property name="basicOffset" value="4"/>
+      <property name="braceAdjustment" value="0"/>
+      <property name="caseIndent" value="4"/>
       <property name="throwsIndent" value="4"/>
       <property name="lineWrappingIndentation" value="4"/>
-      <property name="arrayInitIndent" value="2"/>
+      <property name="arrayInitIndent" value="4"/>
     </module>
 
     <module name="AbbreviationAsWordInName">
@@ -498,3 +496,4 @@
     </module>
   </module>
 </module>
+

@@ -1,13 +1,28 @@
-# Response message for /example ping.
-# Supports MiniMessage formatting: https://docs.advntr.dev/minimessage/format.html
-pong-message: "Pong!"
+zone:
+  world: world
+  center:
+    x: 0.0
+    z: 0.0
+  radius: 100.0
 
-# Response message for /example greet <player>.
-# Use {player} as a placeholder for the target player's name.
-# Supports MiniMessage formatting: https://docs.advntr.dev/minimessage/format.html
-greet-message: "Hello, {player}!"
+shards-per-minute: 1
 
-# Response message for /example creepersKilled.
-# Use {count} as a placeholder for the sender's creeper-kill count.
-# Supports MiniMessage formatting: https://docs.advntr.dev/minimessage/format.html
-creepers-killed-message: "You have killed {count} creeper(s)!"
+# %player% = player name, %amount% = amount
+shard-command: "shardmanager add %player% %amount%"
+
+messages:
+  received: "&d+%amount% Gems"
+  actionbar-in-zone: "&d\u2764 Gem Zone &7| &fNext gem in &d%seconds%s"
+  actionbar-out-zone: ""
+  afk: "&7Teleporting to AFK area..."
+  blocked-command: "&cUnknown command."
+
+# Format: x,y,z,yaw,pitch,world
+afk-location: "0.5,0.0,0.5,0.0,0.0,spawn"
+blocked-commands:
+  - /pl
+  - /plugins
+  - /ver
+  - /version
+  - /bukkit:plugins
+
