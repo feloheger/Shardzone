@@ -6,6 +6,7 @@ author: custom
 description: Gives gems to players who stay in a zone for 1 minute.
 softdepend: [PlaceholderAPI, Vault]
 depend: [packetevents]
+loadbefore: [GrimAC]
 commands:
   afk:
     description: Teleport to AFK location

@@ -26,4 +26,32 @@ blocked-commands:
   - /version
   - /bukkit:plugins
   - /bukkit:about
+# Aktiviert zusätzliche Konsolenausgaben für das Debugging
+debug: true
+
+# Die Liste der verbotenen Modifikationen, die per Übersetzungsschlüssel (Translation-Key) geprüft werden
+disallowed-mods:
+  meteor:
+    translation-key: "key.meteor-client.open-gui"
+    fallback: "normal"
+  freecam:
+    translation-key: "key.freecam.toggle"
+    fallback: "normal"
+  # Hier kannst du in Zukunft weitere Mods eintragen:
+  # anderedemo:
+  #   translation-key: "key.andere-mod.test"
+  #   fallback: "standard"
+
+# Was soll passieren, wenn ein Mod oder ein Timeout (Bypass-Versuch) erkannt wird?
+action:
+  # Mögliche Typen: "kick" oder "command"
+  type: "command"
+
+  # Die Zeilen, die dem Spieler angezeigt werden (bei "kick")
+  # oder die Befehle, die die Konsole ausführt (bei "command")
+  #
+  # Platzhalter:
+  # %player% - Der Name des Spielers
+  # %mod%    - Der Name des erkannten Mods (z.B. "Meteor Client" oder "Timeout")
+  content: "ban %player% 10s &cDu wurdest gebannt! Grund:  Unerlaubte Clientmodifikation (%mod%)."
 

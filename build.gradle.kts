@@ -40,6 +40,9 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
+    maven("https://repo.opencollab.dev/main/") {
+        name = "opencollab"
+    }
 
     mavenCentral()
 }
@@ -52,6 +55,7 @@ dependencies {
     compileOnly("de.oliver:FancyNpcs:2.9.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.github.retrooper:packetevents-spigot:2.13.0")
+    compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
 
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.2")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
@@ -129,7 +133,7 @@ val shadowJar = tasks.named<ShadowJar>("shadowJar") {
     relocate("org.hibernate.validator", "${project.group}.hibernatevalidator")
     relocate("jakarta.validation", "${project.group}.jakartavalidation")
     relocate("org.jboss.logging", "${project.group}.jbosslogging")
-    relocate("com.github.retrooper.packetevents", "${project.group}.packetevents")
+
 
     minimize {
         exclude(dependency("dev.jorel:commandapi-paper-shade:.*"))
