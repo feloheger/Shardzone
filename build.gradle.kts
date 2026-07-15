@@ -57,9 +57,9 @@ dependencies {
     compileOnly("com.github.retrooper:packetevents-spigot:2.13.0")
     compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
 
-    compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.2")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.3")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
-    testCompileOnly("com.github.spotbugs:spotbugs-annotations:4.10.2")
+    testCompileOnly("com.github.spotbugs:spotbugs-annotations:4.10.3")
 
     testImplementation("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.1")
