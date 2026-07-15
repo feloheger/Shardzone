@@ -33,7 +33,7 @@ debug: true
 disallowed-mods:
   meteor:
     translation-key: "key.meteor-client.open-gui"
-    fallback: "normal"
+    fallback: "Open GUI"
   freecam:
     translation-key: "key.freecam.toggle"
     fallback: "normal"

@@ -1,7 +1,10 @@
 package dev.shardzone;
 
  // Import des neuen Mod-Detectors
+import com.github.retrooper.packetevents.PacketEvents;
+import dev.shardzone.moddeteckt.PlayerListener;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,6 +43,7 @@ public class ShardZonePlugin extends JavaPlugin {
         manager = new ShardZoneManager(this);
         manager.startTask();
 
+
         // BalTop initialisieren
         BalTop balTop = new BalTop(this, this.economy);
 
@@ -51,10 +55,15 @@ public class ShardZonePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new NameTagUpdateListener(this), this);
 
         // NEU: Registrierung des neuen Mod-Detektors (PlayerListener)
-        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+
 
         // Registrierung von Commands
         getCommand("afk").setExecutor(new AfkCommand(this));
+        PacketEvents.getAPI().init();
+        Bukkit.getPluginManager().registerEvents(
+                new PlayerListener(),
+                this
+        );
 
         getLogger().info("ShardZone enabled.");
     }

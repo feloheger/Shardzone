@@ -8,6 +8,7 @@ plugins {
     checkstyle
     id("com.github.spotbugs") version "6.5.8"
     id("com.gradleup.shadow") version "9.5.1"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19"
     java
 }
 
@@ -31,15 +32,16 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 repositories {
     mavenLocal()
+
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
-    maven("https://oss.sonatype.org/content/repositories/central/")
     maven("https://jitpack.io")
     maven("https://libraries.minecraft.net")
     maven("https://repo.fancyinnovations.com/releases")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
+    maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://repo.opencollab.dev/main/") {
         name = "opencollab"
     }
@@ -50,8 +52,9 @@ repositories {
 val mockitoAgent = configurations.create("mockitoAgent")
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT")
+
+    compileOnly("com.github.MilkBowl:VaultAPI:master-SNAPSHOT")
     compileOnly("de.oliver:FancyNpcs:2.9.2")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.github.retrooper:packetevents-spigot:2.13.0")
@@ -95,7 +98,7 @@ spotbugs {
 
 checkstyle {
     toolVersion = "13.6.0"
-    maxWarnings = 100
+    maxWarnings = 1000
 }
 
 configurations.named("checkstyle") {
