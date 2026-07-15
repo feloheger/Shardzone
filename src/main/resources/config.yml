@@ -25,4 +25,5 @@ blocked-commands:
   - /ver
   - /version
   - /bukkit:plugins
+  - /bukkit:about
 

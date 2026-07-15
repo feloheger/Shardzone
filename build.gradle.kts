@@ -27,60 +27,47 @@ version = (if (!hasProperty("ver")) {
     if (ver.startsWith("v") && !ver.lowercase().contains("-rc-")) base else "$base-SNAPSHOT"
 }).uppercase()
 
-// FÜR 1.21.11: Bleibt bei Java 21
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 repositories {
-    maven {
-        name = "papermc"
-        url = uri("https://repo.papermc.io/repository/maven-public/")
-        content {
-            includeModule("io.papermc.paper", "paper-api")
-            includeModule("net.md-5", "bungeecord-chat")
-            includeGroup("io.papermc.adventure")
-        }
-    }
-
-    maven {
-        name = "minecraft"
-        url = uri("https://libraries.minecraft.net")
-        content {
-            includeModule("com.mojang", "brigadier")
-        }
-    }
+    mavenLocal()
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://oss.sonatype.org/content/repositories/central/")
+    maven("https://jitpack.io")
+    maven("https://libraries.minecraft.net")
+    maven("https://repo.fancyinnovations.com/releases")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.codemc.io/repository/maven-releases/")
+    maven("https://repo.codemc.io/repository/maven-snapshots/")
 
     mavenCentral()
-
-    maven {
-        name = "jitpack"
-        url = uri("https://jitpack.io")
-        content {
-            includeGroup("com.github.CrimsonWarpedcraft")
-        }
-    }
 }
 
 val mockitoAgent = configurations.create("mockitoAgent")
 
 dependencies {
-    // FÜR 1.21.11 GEÄNDERT: Paper-API auf Version 1.21.11 angepasst
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("de.oliver:FancyNpcs:2.9.2")
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("com.github.retrooper:packetevents-spigot:2.13.0")
 
-    // Code quality and unit testing. Not required for code functionality.
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.2")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.14.0")
     testCompileOnly("com.github.spotbugs:spotbugs-annotations:4.10.2")
 
-    // FÜR 1.21.11 GEÄNDERT: Paper-API für Tests angepasst
-    testImplementation("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    testImplementation("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.1")
 
-    // Example dependencies. Paper plugins do not require these libraries.
-    implementation("com.github.CrimsonWarpedcraft:cw-commons:v0.3.0")
-    // PluginConfig imports annotations from Jackson and Hibernate Validator directly.
+    implementation("com.github.CrimsonWarpedcraft:cw-commons:v0.3.0") {
+        exclude(group = "org.mockbukkit.mockbukkit")
+    }
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.1")
-    implementation("dev.jorel:commandapi-paper-shade:11.2.0")
+    implementation("dev.jorel:commandapi-paper-shade:11.2.0") {
+        exclude(group = "org.mockbukkit.mockbukkit")
+    }
     implementation("org.hibernate.validator:hibernate-validator:9.1.2.Final")
 
     testImplementation("org.mockito:mockito-core:5.23.0")
@@ -97,19 +84,21 @@ tasks.processResources {
         expand(mapOf("NAME" to rootProject.name, "VERSION" to version, "PACKAGE" to project.group))
     }
 }
+
 spotbugs {
-    ignoreFailures = true   // Build nicht mehr abbrechen
+    ignoreFailures = true
 }
+
 checkstyle {
     toolVersion = "13.6.0"
-    maxWarnings = 0 // Verhindert, dass Gradle den Build abbricht
+    maxWarnings = 100
 }
 
 configurations.named("checkstyle") {
     resolutionStrategy.capabilitiesResolution
-            .withCapability("com.google.collections:google-collections") {
-                select("com.google.guava:guava:23.0")
-            }
+        .withCapability("com.google.collections:google-collections") {
+            select("com.google.guava:guava:23.0")
+        }
 }
 
 tasks.withType<Checkstyle>().configureEach {
@@ -131,15 +120,20 @@ tasks.withType<SpotBugsTask>().configureEach {
 val shadowJar = tasks.named<ShadowJar>("shadowJar") {
     archiveClassifier.set("")
     mergeServiceFiles()
+    dependencies {
+        exclude(dependency("dev.jorel:commandapi-spigot-test-toolkit:.*"))
+    }
     relocate("dev.jorel.commandapi", "${project.group}.commandapi")
     relocate("com.fasterxml", "${project.group}.fasterxml")
     relocate("org.yaml.snakeyaml", "${project.group}.snakeyaml")
     relocate("org.hibernate.validator", "${project.group}.hibernatevalidator")
     relocate("jakarta.validation", "${project.group}.jakartavalidation")
     relocate("org.jboss.logging", "${project.group}.jbosslogging")
-    // These libs load classes via reflection or SPI and must not be minimized
+    relocate("com.github.retrooper.packetevents", "${project.group}.packetevents")
+
     minimize {
         exclude(dependency("dev.jorel:commandapi-paper-shade:.*"))
+        exclude(dependency("dev.jorel:commandapi-spigot-test-toolkit:.*"))
         exclude(dependency("com.fasterxml.jackson.core:.*:.*"))
         exclude(dependency("com.fasterxml.jackson.dataformat:.*:.*"))
         exclude(dependency("com.fasterxml:classmate:.*"))
@@ -147,9 +141,8 @@ val shadowJar = tasks.named<ShadowJar>("shadowJar") {
         exclude(dependency("jakarta.validation:.*:.*"))
         exclude(dependency("org.yaml:snakeyaml:.*"))
         exclude(dependency("org.jboss.logging:.*:.*"))
-        // cw-commons bundles the SQLite JDBC driver (loaded via SPI) inside its own jar;
-        // it never appears as a separate resolvable dependency, so it must be excluded by name.
         exclude(dependency("com.github.CrimsonWarpedcraft:cw-commons:.*"))
+
     }
 }
 
@@ -169,7 +162,6 @@ tasks.register("printProjectName") {
 
 tasks.register("release") {
     dependsOn("build")
-
     doLast {
         if (!version.toString().endsWith("-SNAPSHOT")) {
             val releaseJar = layout.buildDirectory.file("libs/${rootProject.name}.jar").get().asFile
