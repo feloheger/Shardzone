@@ -66,7 +66,7 @@ dependencies {
 
     testImplementation("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.1")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.2")
 
     implementation("com.github.CrimsonWarpedcraft:cw-commons:v0.3.0") {
         exclude(group = "org.mockbukkit.mockbukkit")
